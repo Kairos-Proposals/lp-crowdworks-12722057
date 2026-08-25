@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YURAGI 残タスク対応のご提案 | Kairos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;800&family=Noto+Sans+JP:wght@300;400;500;700&family=Cormorant+Garamond:ital@1&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --deep-sea:#0F1E2C;
+    --mid-tide:#1F3A4D;
+    --mist:#EEF1F0;
+    --mist-dim:#DCE3E1;
+    --gold:#C9A66B;
+    --teal:#5FA8A0;
+    --ink:#16211C;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--mist);
+    color:var(--ink);
+    font-family:'Noto Sans JP', sans-serif;
+    font-weight:300;
+    line-height:1.9;
+    overflow-x:hidden;
+  }
+
+  h1,h2,h3{
+    font-family:'Shippori Mincho', serif;
+    color:var(--deep-sea);
+    letter-spacing:0.04em;
+  }
+
+  .en{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    letter-spacing:0.12em;
+  }
+
+  a{text-decoration:none;}
+
+  .wrap{
+    max-width:1080px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    background:linear-gradient(160deg, var(--deep-sea) 0%, var(--mid-tide) 55%, #274A5B 100%);
+    color:var(--mist);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    padding:120px 24px 160px;
+  }
+
+  .ripple{
+    position:absolute;
+    border-radius:50%;
+    border:1px solid rgba(201,166,107,0.25);
+    animation:expand 8s ease-out infinite;
+    pointer-events:none;
+  }
+  .ripple.r1{ width:200px;height:200px; top:20%; left:10%; animation-delay:0s;}
+  .ripple.r2{ width:340px;height:340px; top:55%; left:70%; animation-delay:2.5s;}
+  .ripple.r3{ width:120px;height:120px; top:70%; left:20%; animation-delay:5s;}
+
+  @keyframes expand{
+    0%{ transform:scale(0.6); opacity:0.6;}
+    100%{ transform:scale(3.2); opacity:0;}
+  }
+
+  .hero-inner{
+    position:relative;
+    z-index:2;
+    text-align:center;
+    max-width:760px;
+  }
+
+  .hero-tag{
+    display:inline-block;
+    font-size:12px;
+    letter-spacing:0.35em;
+    color:var(--gold);
+    border:1px solid rgba(201,166,107,0.5);
+    padding:6px 18px;
+    border-radius:999px;
+    margin-bottom:36px;
+    text-transform:uppercase;
+  }
+
+  .hero h1{
+    color:#fff;
+    font-size:clamp(30px, 5vw, 54px);
+    line-height:1.6;
+    margin-bottom:28px;
+    font-weight:600;
+  }
+
+  .hero h1 span{
+    color:var(--gold);
+  }
+
+  .hero p{
+    color:rgba(238,241,240,0.78);
+    font-size:15px;
+    max-width:520px;
+    margin:0 auto 40px;
+    font-weight:300;
+  }
+
+  .site-name{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:22px;
+    color:var(--teal);
+    letter-spacing:0.15em;
+  }
+
+  .from-kairos{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:16px;
+    font-size:13px;
+    color:rgba(238,241,240,0.6);
+    letter-spacing:0.15em;
+  }
+
+  .from-kairos::before, .from-kairos::after{
+    content:"";
+    width:36px;
+    height:1px;
+    background:rgba(201,166,107,0.5);
+  }
+
+  /* wave divider */
+  .wave{
+    position:relative;
+    height:90px;
+    background:var(--mist);
+  }
+  .wave::before{
+    content:"";
+    position:absolute;
+    top:-1px; left:0; right:0;
+    height:100px;
+    background:var(--deep-sea);
+    clip-path: path('M0,40 C 180,100 360,0 540,45 C 720,90 900,10 1080,50 C 1260,90 1440,20 1440,20 L1440,0 L0,0 Z');
+  }
+
+  /* ---------- SECTION GENERIC ---------- */
+  section{
+    padding:100px 0;
+    position:relative;
+  }
+
+  .eyebrow{
+    font-size:12px;
+    letter-spacing:0.3em;
+    color:var(--teal);
+    text-transform:uppercase;
+    margin-bottom:14px;
+    display:block;
+  }
+
+  .sec-title{
+    font-size:clamp(24px,3.4vw,34px);
+    margin-bottom:20px;
+  }
+
+  .sec-lead{
+    max-width:640px;
+    color:#3c4a44;
+    font-size:15px;
+  }
+
+  /* ---------- UNDERSTANDING ---------- */
+  .understand{
+    background:var(--mist);
+  }
+
+  .understand-grid{
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    gap:60px;
+    margin-top:56px;
+    align-items:start;
+  }
+
+  .understand-visual{
+    position:relative;
+    aspect-ratio:1/1;
+    border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, rgba(95,168,160,0.35), transparent 60%),
+               radial-gradient(circle at 70% 70%, rgba(201,166,107,0.3), transparent 60%),
+               linear-gradient(160deg, var(--deep-sea), var(--mid-tide));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .understand-visual::after{
+    content:"";
+    position:absolute;
+    inset:14%;
+    border:1px solid rgba(238,241,240,0.25);
+    border-radius:50%;
+    animation:spin 30s linear infinite;
+  }
+
+  @keyframes spin{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+  }
+
+  .understand-visual span{
+    color:var(--mist);
+    font-family:'Shippori Mincho',serif;
+    font-size:15px;
+    letter-spacing:0.3em;
+    text-align:center;
+    z-index:2;
+    line-height:2.4;
+  }
+
+  .issue-list{
+    display:flex;
+    flex-direction:column;
+    gap:26px;
+  }
+
+  .issue-item{
+    display:flex;
+    gap:18px;
+    padding-bottom:24px;
+    border-bottom:1px solid var(--mist-dim);
+  }
+
+  .issue-num{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:26px;
+    color:var(--gold);
+    flex-shrink:0;
+    width:36px;
+  }
+
+  .issue-item h3{
+    font-size:16px;
+    margin-bottom:8px;
+    font-weight:600;
+  }
+
+  .issue-item p{
+    font-size:13.5px;
+    color:#4a564f;
+  }
+
+  /* ---------- VALUE ---------- */
+  .value{
+    background:var(--deep-sea);
+    color:var(--mist);
+  }
+
+  .value .eyebrow{ color:var(--gold); }
+  .value .sec-title{ color:#fff; }
+  .value .sec-lead{ color:rgba(238,241,240,0.7); }
+
+  .value-grid{
+    margin-top:56px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:24px;
+  }
+
+  .value-card{
+    background:rgba(238,241,240,0.04);
+    border:1px solid rgba(201,166,107,0.25);
+    border-radius:6px;
+    padding:32px 26px;
+    transition:transform .4s ease, background .4s ease;
+  }
+
+  .value-card:hover{
+    transform:translateY(-6px);
+    background:rgba(201,166,107,0.08);
+  }
+
+  .value-icon{
+    width:42px;height:42px;
+    border-radius:50%;
+    background:linear-gradient(135deg, var(--gold), var(--teal));
+    margin-bottom:20px;
+    position:relative;
+  }
+
+  .value-card h3{
+    color:#fff;
+    font-size:17px;
+    margin-bottom:12px;
+    font-weight:600;
+  }
+
+  .value-card p{
+    font-size:13px;
+    color:rgba(238,241,240,0.68);
+  }
+
+  /* ---------- FLOW ---------- */
+  .flow{
+    background:var(--mist);
+  }
+
+  .flow-line{
+    position:relative;
+    margin-top:70px;
+    padding-left:24px;
+  }
+
+  .flow-line::before{
+    content:"";
+    position:absolute;
+    left:9px; top:6px; bottom:6px;
+    width:1px;
+    background:linear-gradient(var(--gold), var(--teal));
+  }
+
+  .flow-step{
+    position:relative;
+    padding:0 0 48px 34px;
+  }
+
+  .flow-step::before{
+    content:"";
+    position:absolute;
+    left:-4px; top:2px;
+    width:14px;height:14px;
+    border-radius:50%;
+    background:var(--mist);
+    border:2px solid var(--gold);
+  }
+
+  .flow-step .step-tag{
+    font-size:11px;
+    letter-spacing:0.2em;
+    color:var(--teal);
+    display:block;
+    margin-bottom:6px;
+  }
+
+  .flow-step h3{
+    font-size:17px;
+    margin-bottom:8px;
+  }
+
+  .flow-step p{
+    font-size:13.5px;
+    color:#4a564f;
+    max-width:520px;
+  }
+
+  .schedule-note{
+    margin-top:30px;
+    background:#fff;
+    border:1px solid var(--mist-dim);
+    border-radius:8px;
+    padding:24px 28px;
+    display:flex;
+    gap:20px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+
+  .schedule-note .badge{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:34px;
+    color:var(--gold);
+  }
+
+  .schedule-note p{
+    font-size:13px;
+    color:#4a564f;
+  }
+
+  /* ---------- CLOSING ---------- */
+  .closing{
+    background:linear-gradient(160deg, var(--mid-tide), var(--deep-sea));
+    color:var(--mist);
+    text-align:center;
+    padding:120px 24px;
+  }
+
+  .closing h2{
+    color:#fff;
+    font-size:clamp(24px,4vw,36px);
+    margin-bottom:24px;
+  }
+
+  .closing p{
+    max-width:520px;
+    margin:0 auto 44px;
+    font-size:14px;
+    color:rgba(238,241,240,0.75);
+  }
+
+  .cta-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:14px;
+    background:var(--gold);
+    color:var(--deep-sea);
+    font-weight:700;
+    font-size:14px;
+    letter-spacing:0.1em;
+    padding:18px 42px;
+    border-radius:999px;
+    transition:transform .3s ease, box-shadow .3s ease;
+    box-shadow:0 10px 30px rgba(201,166,107,0.25);
+  }
+
+  .cta-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 16px 40px rgba(201,166,107,0.35);
+  }
+
+  .meta-row{
+    margin-top:56px;
+    display:flex;
+    justify-content:center;
+    gap:48px;
+    flex-wrap:wrap;
+    font-size:12px;
+    color:rgba(238,241,240,0.5);
+    letter-spacing:0.1em;
+  }
+
+  .meta-row div span{
+    display:block;
+    color:var(--gold);
+    font-size:18px;
+    font-family:'Shippori Mincho',serif;
+    margin-bottom:4px;
+  }
+
+  footer{
+    background:var(--deep-sea);
+    color:rgba(238,241,240,0.4);
+    text-align:center;
+    font-size:11px;
+    padding:26px;
+    letter-spacing:0.15em;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:800px){
+    .understand-grid{
+      grid-template-columns:1fr;
+    }
+    .understand-visual{
+      max-width:280px;
+      margin:0 auto;
+    }
+  }
+
+  @media (max-width:520px){
+    .hero{ padding:100px 20px 130px;}
+    section{ padding:70px 0;}
+    .wrap{ padding:0 22px;}
+    .schedule-note{ flex-direction:column; align-items:flex-start;}
+  }
+
+</style>
+</head>
+<body>
+
+  <section class="hero">
+    <div class="ripple r1"></div>
+    <div class="ripple r2"></div>
+    <div class="ripple r3"></div>
+    <div class="hero-inner">
+      <span class="hero-tag">Proposal from Kairos</span>
+      <h1>デザインの揺らぎは、そのままに。<br>挙動だけを、<span>静かに整えます。</span></h1>
+      <p class="site-name">— for “YURAGI” —</p>
+      <p>Framerで組み上げられた「YURAGI」の世界観を崩さず、検索・外部埋め込み・カルーセルという3つの残タスクを、フロントエンドの手当てで着実に仕上げるご提案です。</p>
+      <div class="from-kairos">KAIROS / Web制作・システム開発チーム</div>
+    </div>
+  </section>
+
+  <div class="wave"></div>
+
+  <section class="understand">
+    <div class="wrap">
+      <span class="eyebrow">Understanding</span>
+      <h2 class="sec-title">「ほぼ完成」だからこそ、<br>残り3つの精度が全体の印象を決める。</h2>
+      <p class="sec-lead">デザインとページ構成が固まっているYURAGIにとって、今回の残タスクは単なる機能追加ではなく、体験の完成度を左右する「仕上げ」だと理解しています。</p>
+
+      <div class="understand-grid">
+        <div class="understand-visual">
+          <span>YURAGI<br>の<br>ゆらぎを<br>保つ</span>
+        </div>
+
+        <div class="issue-list">
+          <div class="issue-item">
+            <div class="issue-num en">01</div>
+            <div>
+              <h3>CMS検索・タグ絞り込み</h3>
+              <p>Framer CMSに登録されたデータへ、フリーテキスト検索とタグ検索を実装。既存デザインを踏襲した、控えめで馴染むUIで設計します。</p>
+            </div>
+          </div>
+
+          <div class="issue-item">
+            <div class="issue-num en">02</div>
+            <div>
+              <h3>Bokun Embedのレスポンシブ化</h3>
+              <p>PC表示でもSP版レイアウトしか出ない現象を解消。Embedコードとドキュメントを確認し、デバイスごとに適切な表示へ調整します。</p>
+            </div>
+          </div>
+
+          <div class="issue-item">
+            <div class="issue-num en">03</div>
+            <div>
+              <h3>カルーセルの1枚送り調整</h3>
+              <p>スワイプ／クリックで複数枚まとめて動く挙動を、1枚ずつの滑らかな送りへ。ループやアニメーション速度も含め、Framer内でチューニングします。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="value">
+    <div class="wrap">
+      <span class="eyebrow">What We Provide</span>
+      <h2 class="sec-title">Kairosが持ち込める価値</h2>
+      <p class="sec-lead">見た目を変えず、動きだけを正確に直す。Framer特有の制約を理解した上で、実務ベースで対応します。</p>
+
+      <div class="value-grid">
+        <div class="value-card">
+          <div class="value-icon"></div>
+          <h3>Framer実装の実務経験</h3>
+          <p>Framer CMS・コンポーネント・コードオーバーライドを用いたサイト構築の実績があり、既存プロジェクトへの後入りにも対応可能です。</p>
+        </div>
+
+        <div class="value-card">
+          <div class="value-icon"></div>
+          <h3>デザインを崩さない設計</h3>
+          <p>UIコンポーネントを新規に増やす際も、既存のトーン・余白・タイポグラフィに合わせて設計し、違和感のない仕上がりを意識します。</p>
+        </div>
+
+        <div class="value-card">
+          <div class="value-icon"></div>
+          <h3>外部Embedのトラブル対応力</h3>
+          <p>Bokunのようなサードパーティ埋め込みで起きがちなレスポンシブ崩れを、コード修正・埋め込み方法の見直しの両面から解消します。</p>
+        </div>
+
+        <div class="value-card">
+          <div class="value-icon"></div>
+          <h3>チャットでの柔軟なやりとり</h3>
+          <p>Slackでの日本語コミュニケーションに対応し、軽微な仕様相談も都度すり合わせながら進行します。</p>
+        </div>
+
+        <div class="value-card">
+          <div class="value-icon"></div>
+          <h3>納期を見据えた進行管理</h3>
+          <p>12/15納期を前提に、着手日から逆算したスケジュールを組み、進捗を都度共有しながら仕上げます。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="flow">
+    <div class="wrap">
+      <span class="eyebrow">Process</span>
+      <h2 class="sec-title">進め方とスケジュールイメージ</h2>
+      <p class="sec-lead">契約後、権限をいただき次第すぐに着手できる体制です。小さく確認しながら進めます。</p>
+
+      <div class="flow-line">
+        <div class="flow-step">
+          <span class="step-tag en">Step 1</span>
+          <h3>キックオフ・環境確認</h3>
+          <p>Framerプロジェクトへの招待、CMS構造・タグ設計・Bokun Embedコードの現状を確認し、実装方針をすり合わせます。</p>
+        </div>
+
+        <div class="flow-step">
+          <span class="step-tag en">Step 2</span>
+          <h3>検索・タグ絞り込みの実装</h3>
+          <p>フリーテキスト検索とタグ検索のUI・ロジックを構築し、既存デザインとの整合を確認しながら仮反映します。</p>
+        </div>
+
+        <div class="flow-step">
+          <span class="step-tag en">Step 3</span>
+          <h3>Bokun Embed／カルーセル調整</h3>
+          <p>PC/SP双方でのBokun表示を確認・修正し、並行してカルーセルの1枚送り挙動を調整します。</p>
+        </div>
+
+        <div class="flow-step">
+          <span class="step-tag en">Step 4</span>
+          <h3>確認・微調整・納品</h3>
+          <p>実機・実ブラウザでの最終確認を行い、フィードバックを反映して納品します。</p>
+        </div>
+      </div>
+
+      <div class="schedule-note">
+        <div class="badge">〜12/15</div>
+        <p>想定納期に合わせ、着手可能日をご連絡いただき次第、逆算したスケジュールをご提示します。ご希望があれば前倒しでの調整も可能です。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing">
+    <div class="wrap" style="max-width:640px;">
+      <span class="eyebrow" style="color:var(--gold);">Next Step</span>
+      <h2>YURAGIの仕上げを、<br>一緒に完成させませんか。</h2>
+      <p>まずはFramerプロジェクトの現状や、検索・タグ設計のご要望など、詳細を伺えればと思います。着手可能日・実績のご共有とあわせ、お気軽にご連絡ください。</p>
+      <a href="#" class="cta-btn">Kairosに相談する →</a>
+
+      <div class="meta-row">
+        <div><span>30,000円〜</span>ご予算内で対応想定</div>
+        <div><span>Framer</span>CMS実装経験あり</div>
+        <div><span>Slack</span>日本語対応可</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    KAIROS — Web制作・システム開発チーム ／ 本ページはYURAGI様向け提案資料です
+  </footer>
+
+</body>
+</html>
